@@ -76,49 +76,49 @@ This section describes the overall structure and organization of the project fil
 
 See [Project Structure](/.doc/project-structure.md)
 
-## Como executar o projeto
+## How to run the project
 
-O projeto é composto por dois aplicativos que precisam ser executados em paralelo:
+The project is composed of two applications that need to run in parallel:
 
-- **Backend**: API em .NET 8 (`root/src/backend`)
-- **Frontend**: aplicação Angular 19 (`root/src/frontend`)
+- **Backend**: .NET 8 API (`root/src/backend`)
+- **Frontend**: Angular 19 application (`root/src/frontend`)
 
-Antes de iniciar qualquer um dos dois, é **obrigatório** subir a infraestrutura (PostgreSQL) via Docker Compose, pois o backend depende do banco para iniciar.
+Before starting either of them, it is **mandatory** to start the infrastructure (PostgreSQL) via Docker Compose, since the backend depends on the database to start.
 
-### Pré-requisitos
+### Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 18+](https://nodejs.org/) e npm
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) com Docker Compose
+- [Node.js 18+](https://nodejs.org/) and npm
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) with Docker Compose
 
-### 1. Subir o banco de dados (Docker Compose)
+### 1. Start the database (Docker Compose)
 
-O `docker-compose.yml` do backend já define o serviço do **PostgreSQL** (e também Mongo/Redis, caso queira utilizá-los). Para iniciar apenas o banco Postgres:
+The backend's `docker-compose.yml` already defines the **PostgreSQL** service (as well as Mongo/Redis, in case you want to use them). To start only the Postgres database:
 
 ```bash
 cd root/src/backend
 docker compose up -d ambev.developerevaluation.database
 ```
 
-Para subir todos os serviços auxiliares (Postgres, Mongo e Redis):
+To start all the auxiliary services (Postgres, Mongo and Redis):
 
 ```bash
 docker compose up -d ambev.developerevaluation.database ambev.developerevaluation.nosql ambev.developerevaluation.cache
 ```
 
-Credenciais padrão do Postgres (definidas no compose):
+Default Postgres credentials (defined in the compose file):
 
 - Host: `localhost`
-- Porta: `5432`
+- Port: `5432`
 - Database: `developer_evaluation`
-- Usuário: `developer`
-- Senha: `ev@luAt10n`
+- User: `developer`
+- Password: `ev@luAt10n`
 
-> Verifique se o container está em execução com `docker ps`. O backend **não sobe corretamente sem o Postgres**.
+> Make sure the container is running with `docker ps`. The backend **will not start correctly without Postgres**.
 
-### 2. Executar o backend (.NET API)
+### 2. Run the backend (.NET API)
 
-Com o banco já em execução, em um terminal:
+With the database already running, in a terminal:
 
 ```bash
 cd root/src/backend
@@ -126,14 +126,14 @@ dotnet restore
 dotnet run --project src/Ambev.DeveloperEvaluation.WebApi
 ```
 
-A API ficará disponível em:
+The API will be available at:
 
 - HTTP: `http://localhost:5119`
 - Swagger: `http://localhost:5119/swagger`
 
-### 3. Executar o frontend (Angular)
+### 3. Run the frontend (Angular)
 
-Em **outro terminal**, na pasta do frontend:
+In **another terminal**, inside the frontend folder:
 
 ```bash
 cd root/src/frontend
@@ -141,18 +141,18 @@ npm install
 npm start
 ```
 
-A aplicação ficará disponível em `http://localhost:4200/`.
+The application will be available at `http://localhost:4200/`.
 
-O frontend lê a URL da API a partir do arquivo `.env` (variável `VITE_API_BASE_URL`). Caso ainda não exista, copie o exemplo:
+The frontend reads the API URL from the `.env` file (variable `VITE_API_BASE_URL`). If it does not exist yet, copy the example:
 
 ```bash
 cp .env.example .env
 ```
 
-Por padrão ele já aponta para `http://localhost:5119`, que é onde o backend é exposto em desenvolvimento.
+By default it already points to `http://localhost:5119`, which is where the backend is exposed in development.
 
-### Resumo dos passos
+### Steps summary
 
-1. `docker compose up -d ambev.developerevaluation.database` (a partir de `root/src/backend`)
-2. `dotnet run --project src/Ambev.DeveloperEvaluation.WebApi` (a partir de `root/src/backend`)
-3. `npm install && npm start` (a partir de `root/src/frontend`)
+1. `docker compose up -d ambev.developerevaluation.database` (from `root/src/backend`)
+2. `dotnet run --project src/Ambev.DeveloperEvaluation.WebApi` (from `root/src/backend`)
+3. `npm install && npm start` (from `root/src/frontend`)
