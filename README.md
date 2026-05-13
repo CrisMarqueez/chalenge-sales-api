@@ -75,3 +75,84 @@ This section includes links to the detailed documentation for the different API 
 This section describes the overall structure and organization of the project files and directories. 
 
 See [Project Structure](/.doc/project-structure.md)
+
+## Como executar o projeto
+
+O projeto é composto por dois aplicativos que precisam ser executados em paralelo:
+
+- **Backend**: API em .NET 8 (`root/src/backend`)
+- **Frontend**: aplicação Angular 19 (`root/src/frontend`)
+
+Antes de iniciar qualquer um dos dois, é **obrigatório** subir a infraestrutura (PostgreSQL) via Docker Compose, pois o backend depende do banco para iniciar.
+
+### Pré-requisitos
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download)
+- [Node.js 18+](https://nodejs.org/) e npm
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) com Docker Compose
+
+### 1. Subir o banco de dados (Docker Compose)
+
+O `docker-compose.yml` do backend já define o serviço do **PostgreSQL** (e também Mongo/Redis, caso queira utilizá-los). Para iniciar apenas o banco Postgres:
+
+```bash
+cd root/src/backend
+docker compose up -d ambev.developerevaluation.database
+```
+
+Para subir todos os serviços auxiliares (Postgres, Mongo e Redis):
+
+```bash
+docker compose up -d ambev.developerevaluation.database ambev.developerevaluation.nosql ambev.developerevaluation.cache
+```
+
+Credenciais padrão do Postgres (definidas no compose):
+
+- Host: `localhost`
+- Porta: `5432`
+- Database: `developer_evaluation`
+- Usuário: `developer`
+- Senha: `ev@luAt10n`
+
+> Verifique se o container está em execução com `docker ps`. O backend **não sobe corretamente sem o Postgres**.
+
+### 2. Executar o backend (.NET API)
+
+Com o banco já em execução, em um terminal:
+
+```bash
+cd root/src/backend
+dotnet restore
+dotnet run --project src/Ambev.DeveloperEvaluation.WebApi
+```
+
+A API ficará disponível em:
+
+- HTTP: `http://localhost:5119`
+- Swagger: `http://localhost:5119/swagger`
+
+### 3. Executar o frontend (Angular)
+
+Em **outro terminal**, na pasta do frontend:
+
+```bash
+cd root/src/frontend
+npm install
+npm start
+```
+
+A aplicação ficará disponível em `http://localhost:4200/`.
+
+O frontend lê a URL da API a partir do arquivo `.env` (variável `VITE_API_BASE_URL`). Caso ainda não exista, copie o exemplo:
+
+```bash
+cp .env.example .env
+```
+
+Por padrão ele já aponta para `http://localhost:5119`, que é onde o backend é exposto em desenvolvimento.
+
+### Resumo dos passos
+
+1. `docker compose up -d ambev.developerevaluation.database` (a partir de `root/src/backend`)
+2. `dotnet run --project src/Ambev.DeveloperEvaluation.WebApi` (a partir de `root/src/backend`)
+3. `npm install && npm start` (a partir de `root/src/frontend`)
