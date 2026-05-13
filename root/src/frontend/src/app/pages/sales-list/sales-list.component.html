@@ -1,0 +1,159 @@
+<div class="sales">
+  <div class="sales__toolbar">
+    <div class="sales__intro">
+      <h1 class="sales__title">Vendas</h1>
+      <p class="sales__api">
+        <span>API em</span>
+        <code class="sales__api-code">{{ apiBaseUrl }}</code>
+        <button
+          type="button"
+          class="sales__copy"
+          (click)="copyApiBase()"
+          [attr.aria-label]="'Copiar URL da API'"
+          title="Copiar URL"
+        >
+          @if (copied()) {
+            <span class="sales__copy-ok" aria-live="polite">Copiado</span>
+          } @else {
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+              />
+            </svg>
+          }
+        </button>
+      </p>
+    </div>
+    <button
+      type="button"
+      class="sales__cta"
+      (click)="router.navigate(['/sales/new'])"
+    >
+      <span class="sales__cta-plus" aria-hidden="true">+</span>
+      Nova venda
+    </button>
+  </div>
+
+  @if (error(); as err) {
+    <div class="sales__alert" role="alert">{{ err }}</div>
+  }
+
+  <div class="sales__card">
+    <div class="sales__card-head">
+      <div class="sales__card-brand">
+        <div class="sales__card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22">
+            <path
+              fill="currentColor"
+              d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 12h8v2H8v-2zm0 4h8v2H8v-2zm0-8h3v2H8V8z"
+            />
+          </svg>
+        </div>
+        <div>
+          <h2 class="sales__card-title">Listagem</h2>
+          <p class="sales__card-sub">Visualize e gerencie todas as vendas cadastradas.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sales__meta">
+      <p class="sales__counts">
+        @if (loading()) {
+          Carregando…
+        } @else {
+          {{ totalItems() }} registro(s) — página {{ page }} de {{ totalPages() }}
+        }
+      </p>
+      <label class="sales__page-size">
+        <span>Por página</span>
+        <select
+          [value]="pageSize"
+          (change)="setPageSize(+$any($event.target).value)"
+          [disabled]="loading()"
+        >
+          @for (n of pageSizes; track n) {
+            <option [value]="n">{{ n }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="sales__table-wrap">
+      <table class="sales__table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Filial</th>
+            <th class="sales__th-num">Total</th>
+            <th>Status</th>
+            <th class="sales__th-actions">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (rows().length === 0 && !loading()) {
+            <tr>
+              <td colspan="7" class="sales__empty">Nenhuma venda encontrada.</td>
+            </tr>
+          }
+          @for (s of rows(); track s.id) {
+            <tr>
+              <td class="sales__mono">{{ s.saleNumber }}</td>
+              <td>{{ formatDate(s.saleDate) }}</td>
+              <td>{{ s.customerName }}</td>
+              <td>{{ s.branchName }}</td>
+              <td class="sales__td-num">{{ formatMoney(s.totalAmount) }}</td>
+              <td>
+                @if (s.isCancelled) {
+                  <span class="sales__badge sales__badge--off">
+                    <span class="sales__badge-dot" aria-hidden="true"></span>
+                    Cancelada
+                  </span>
+                } @else {
+                  <span class="sales__badge sales__badge--on">
+                    <span class="sales__badge-dot" aria-hidden="true"></span>
+                    Ativa
+                  </span>
+                }
+              </td>
+              <td>
+                <div class="sales__actions">
+                  <button
+                    type="button"
+                    class="sales__btn-view"
+                    (click)="router.navigate(['/sales', s.id])"
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                      />
+                    </svg>
+                    Ver
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sales__pager">
+      <button type="button" class="sales__pager-btn" [disabled]="page <= 1 || loading()" (click)="prevPage()">
+        Anterior
+      </button>
+      <span class="sales__pager-info">Página {{ page }} de {{ totalPages() }}</span>
+      <button
+        type="button"
+        class="sales__pager-btn"
+        [disabled]="page >= totalPages() || loading()"
+        (click)="nextPage()"
+      >
+        Próxima
+      </button>
+    </div>
+  </div>
+</div>

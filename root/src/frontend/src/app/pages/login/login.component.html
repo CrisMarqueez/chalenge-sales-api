@@ -1,0 +1,51 @@
+<div class="page-center">
+    <div class="logo-wrap">
+      <img src="/ambev-logo.png?v=2" alt="Logo Ambev" class="logo" />
+    </div>
+    <div class="card">
+      <h1>Entrar</h1>
+      <p class="muted">
+        Use o e-mail ou o nome de usuário e a senha cadastrados (contrato
+        <code>/auth/login</code>).
+      </p>
+      @if (registered) {
+        <div class="alert ok">
+          <strong>Cadastro concluído</strong>
+          <p>Faça login com o e-mail e a senha que você definiu.</p>
+        </div>
+      }
+      @if (error(); as err) {
+        <div class="alert err">
+          <strong>Falha no login</strong>
+          <p>{{ err }}</p>
+        </div>
+      }
+      <form (ngSubmit)="submit()">
+        <label for="login-email">E-mail</label>
+        <input
+          id="login-email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          autocomplete="email"
+          required
+        />
+        <label for="login-password">Senha</label>
+        <input
+          id="login-password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          autocomplete="current-password"
+          required
+        />
+        <button type="submit" class="btn primary full" [disabled]="loading()">
+          {{ loading() ? 'Entrando…' : 'Entrar' }}
+        </button>
+      </form>
+      <p class="muted center">
+        Não tem conta?
+        <a routerLink="/cadastro">Cadastre-se</a>
+      </p>
+    </div>
+  </div>

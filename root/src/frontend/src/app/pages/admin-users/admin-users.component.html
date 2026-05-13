@@ -1,0 +1,147 @@
+<div class="wrap">
+  <h1>Usuários</h1>
+  <p class="muted">
+    Administração de contas — API <code>/api/admin/users</code>
+  </p>
+
+  @if (error(); as err) {
+    <div class="alert err">{{ err }}</div>
+  }
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h2>Listagem</h2>
+        <p class="muted">
+          @if (loading()) {
+            Carregando…
+          } @else {
+            {{ totalItems() }} usuário(s) — página {{ page }} de {{ totalPages() }}
+          }
+        </p>
+      </div>
+      <label class="inline">
+        Por página
+        <select [value]="pageSize" (change)="setPageSize(+$any($event.target).value)">
+          @for (n of pageSizes; track n) {
+            <option [value]="n">{{ n }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Função</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (rows().length === 0 && !loading()) {
+          <tr>
+            <td colspan="6" class="muted">Nenhum usuário encontrado.</td>
+          </tr>
+        }
+        @for (u of rows(); track u.id) {
+          <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.phone }}</td>
+            <td>{{ rl(u.role) }}</td>
+            <td>{{ sl(u.status) }}</td>
+            <td class="actions-cell">
+              <button type="button" class="btn sm" (click)="openEdit(u)">Editar</button>
+              <button
+                type="button"
+                class="btn sm danger"
+                (click)="deleteTarget.set(u); deleteOpen.set(true)"
+              >
+                Excluir
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pager">
+      <button type="button" class="btn" [disabled]="page <= 1 || loading()" (click)="prevPage()">
+        Anterior
+      </button>
+      <span class="muted">Página {{ page }} / {{ totalPages() }}</span>
+      <button
+        type="button"
+        class="btn"
+        [disabled]="page >= totalPages() || loading()"
+        (click)="nextPage()"
+      >
+        Próxima
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (editOpen()) {
+  <div class="modal" (click)="editOpen.set(false)">
+    <div class="modal-box wide" (click)="$event.stopPropagation()">
+      <h3>Editar usuário</h3>
+      <p class="muted">Altere os dados ou defina uma nova senha (opcional).</p>
+      <form (ngSubmit)="submitEdit()">
+        <label>Usuário</label>
+        <input [(ngModel)]="form.username" name="eu" required minlength="3" maxlength="50" />
+        <label>E-mail</label>
+        <input [(ngModel)]="form.email" name="ee" type="email" required />
+        <label>Telefone</label>
+        <input [(ngModel)]="form.phone" name="ep" type="tel" required />
+        <div class="grid2">
+          <div>
+            <label>Função</label>
+            <select [(ngModel)]="form.role" name="er">
+              @for (o of roleOptions; track o.value) {
+                <option [ngValue]="o.value">{{ o.label }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select [(ngModel)]="form.status" name="es">
+              @for (o of statusOptions; track o.value) {
+                <option [ngValue]="o.value">{{ o.label }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <label>Nova senha (opcional)</label>
+        <input [(ngModel)]="form.newPassword" name="enp" type="password" autocomplete="new-password" />
+        <div class="modal-actions">
+          <button type="button" class="btn" [disabled]="saving()" (click)="editOpen.set(false)">Cancelar</button>
+          <button type="submit" class="btn primary" [disabled]="saving()">
+            {{ saving() ? 'Salvando…' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (deleteOpen()) {
+  <div class="modal" (click)="deleteOpen.set(false)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <h3>Excluir usuário</h3>
+      <p class="muted">
+        Confirma a exclusão de <strong>{{ deleteTarget()?.username }}</strong>?
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="btn" [disabled]="deleting()" (click)="deleteOpen.set(false)">Cancelar</button>
+        <button type="button" class="btn danger" [disabled]="deleting()" (click)="confirmDelete()">
+          {{ deleting() ? 'Excluindo…' : 'Excluir' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,338 @@
+.sales {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.sales__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.sales__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+}
+
+.sales__api {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.sales__api-code {
+  font-size: 0.8125rem;
+  word-break: break-all;
+}
+
+.sales__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  border: none;
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  border-radius: 0.25rem;
+  vertical-align: middle;
+}
+
+.sales__copy:hover {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.sales__copy-ok {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #047857;
+}
+
+.sales__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--primary);
+  color: var(--primary-fg);
+  cursor: pointer;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 45%, transparent);
+  transition:
+    filter 0.15s,
+    transform 0.12s;
+}
+
+.sales__cta:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.sales__cta-plus {
+  font-size: 1.15rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.sales__alert {
+  padding: 0.85rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  font-size: 0.875rem;
+}
+
+.sales__card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.35rem 1.15rem;
+  box-shadow:
+    0 1px 3px color-mix(in srgb, var(--fg) 6%, transparent),
+    0 12px 32px color-mix(in srgb, var(--fg) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, #fff);
+}
+
+.sales__card-head {
+  margin-bottom: 1rem;
+}
+
+.sales__card-brand {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.sales__card-icon {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(145deg, #e3f2fd 0%, #bbdefb 100%);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, #e3f2fd);
+}
+
+.sales__card-title {
+  margin: 0 0 0.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.sales__card-sub {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.sales__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sales__counts {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.sales__page-size {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+
+.sales__page-size select {
+  padding: 0.4rem 2rem 0.4rem 0.65rem;
+  border-radius: 0.4rem;
+  border: 1px solid #cfd8dc;
+  background: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.sales__table-wrap {
+  overflow-x: auto;
+  margin: 0 -0.15rem;
+}
+
+.sales__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.sales__table thead th {
+  text-align: left;
+  padding: 0.65rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #546e7a;
+  background: #eceff1;
+  border-bottom: 1px solid #cfd8dc;
+}
+
+.sales__table tbody td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.sales__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sales__th-num,
+.sales__td-num {
+  text-align: right;
+}
+
+.sales__th-actions {
+  text-align: right;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.sales__mono {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+}
+
+.sales__empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 1rem !important;
+}
+
+.sales__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sales__badge-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sales__badge--on {
+  color: #065f46;
+  background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #34d399;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.sales__badge--on .sales__badge-dot {
+  background: #059669;
+}
+
+.sales__badge--off {
+  color: #92400e;
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fbbf24;
+}
+
+.sales__badge--off .sales__badge-dot {
+  background: #d97706;
+}
+
+.sales__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.sales__btn-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--fg);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+
+.sales__btn-view:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.sales__pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  gap: 0.5rem;
+}
+
+.sales__pager-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: var(--fg);
+}
+
+.sales__pager-btn:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.sales__pager-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sales__pager-info {
+  font-size: 0.875rem;
+  color: var(--muted);
+}

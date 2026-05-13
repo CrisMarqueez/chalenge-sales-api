@@ -1,0 +1,51 @@
+:root {
+  /* Tema claro */
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --card: #f8fafc;
+  --border: #e2e8f0;
+  --muted: #64748b;
+  --muted-bg: #f1f5f9;
+  /* Azul Ambev (logo / identidade corporativa) */
+  --primary: #003da5;
+  --primary-hover: #002f7d;
+  --primary-fg: #ffffff;
+  --primary-soft: color-mix(in srgb, var(--primary) 10%, transparent);
+  /* Ações destrutivas / erro */
+  --danger: #b91c1c;
+  --danger-border: #dc2626;
+  --danger-bg: color-mix(in srgb, #dc2626 10%, transparent);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+code {
+  font-size: 0.8em;
+  background: var(--muted-bg);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

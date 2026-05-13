@@ -7,6 +7,8 @@ The project should be structured as follows:
 ```
 root
 ├── src/
-├── tests/
+│   ├── backend/          # API .NET (solução Ambev.DeveloperEvaluation.sln)
+│   └── frontend/         # Angular
+├── tests/                # Projetos de teste (xUnit), referenciam src/backend/src/*
 └── README.md
 ```

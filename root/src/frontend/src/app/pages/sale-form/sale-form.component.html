@@ -1,0 +1,108 @@
+@if (loading()) {
+  <p class="muted pad">Carregando…</p>
+} @else {
+  <div class="wrap">
+    <div class="actions">
+      <button type="button" class="btn" (click)="back()">Voltar</button>
+    </div>
+    <div class="card">
+      <h1>{{ isEdit ? 'Editar venda' : 'Nova venda' }}</h1>
+      <p class="muted">
+        Quantidade por produto: máximo {{ maxQty }}. Descontos são calculados na API.
+      </p>
+      @if (error(); as err) {
+        <div class="alert err">{{ err }}</div>
+      }
+      <form (ngSubmit)="submit()">
+        <label>Data da venda</label>
+        <input type="datetime-local" name="saleDate" [(ngModel)]="saleDate" required />
+        <label>Cliente</label>
+        <input
+          type="text"
+          name="customerName"
+          [(ngModel)]="customerName"
+          required
+          autocomplete="name"
+        />
+        <label>Filial</label>
+        <input
+          type="text"
+          name="branchName"
+          [(ngModel)]="branchName"
+          required
+          autocomplete="organization"
+        />
+        @if (isEdit) {
+          <label class="check">
+            <input type="checkbox" name="saleCancelled" [(ngModel)]="saleCancelled" />
+            Venda cancelada
+          </label>
+        }
+        <hr />
+        <div class="line-head">
+          <h3>Itens</h3>
+          <button type="button" class="btn" (click)="addLine()">Adicionar item</button>
+        </div>
+        @for (line of lines; track line.key; let idx = $index) {
+          <div class="line-card">
+            <div class="line-top">
+              <button
+                type="button"
+                class="btn ghost"
+                (click)="removeLine(line.key)"
+                [disabled]="lines.length <= 1"
+              >
+                Remover
+              </button>
+              <span class="muted">Item {{ idx + 1 }}</span>
+            </div>
+            <label>Produto</label>
+            <input
+              type="text"
+              [(ngModel)]="line.productName"
+              [ngModelOptions]="{ standalone: true }"
+              required
+            />
+            <div class="grid2">
+              <div>
+                <label>Quantidade</label>
+                <input
+                  type="number"
+                  [(ngModel)]="line.quantity"
+                  [ngModelOptions]="{ standalone: true }"
+                  [min]="1"
+                  [max]="maxQty"
+                  required
+                />
+              </div>
+              <div>
+                <label>Preço unitário (R$)</label>
+                <input
+                  type="number"
+                  [(ngModel)]="line.unitPrice"
+                  [ngModelOptions]="{ standalone: true }"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+            @if (isEdit) {
+              <label class="check">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="line.isCancelled"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                Item cancelado
+              </label>
+            }
+          </div>
+        }
+        <button type="submit" class="btn primary" [disabled]="saving()">
+          {{ saving() ? 'Salvando…' : 'Salvar' }}
+        </button>
+      </form>
+    </div>
+  </div>
+}

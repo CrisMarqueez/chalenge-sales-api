@@ -1,0 +1,161 @@
+<div class="wrap">
+  <div class="actions">
+    <button type="button" class="btn" (click)="router.navigate(['/sales'])">Voltar</button>
+    @if (id) {
+      <button
+        type="button"
+        class="btn"
+        [disabled]="!sale() || sale()!.isCancelled"
+        (click)="router.navigate(['/sales', id, 'edit'])"
+      >
+        Editar
+      </button>
+      <button type="button" class="btn danger" [disabled]="!sale()" (click)="deleteOpen.set(true)">
+        Excluir
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [disabled]="!sale() || sale()!.isCancelled"
+        (click)="cancelSaleOpen.set(true)"
+      >
+        Cancelar venda
+      </button>
+    }
+  </div>
+
+  @if (error(); as err) {
+    <div class="alert err">{{ err }}</div>
+  }
+
+  @if (loading()) {
+    <p class="muted">Carregando…</p>
+  } @else if (sale()) {
+    @let s = sale()!;
+    <div class="card">
+      <div class="head">
+        <div>
+          <h1>Venda {{ s.saleNumber }}</h1>
+          <p class="muted">{{ formatDate(s.saleDate) }}</p>
+        </div>
+        @if (s.isCancelled) {
+          <span class="badge bad">Cancelada</span>
+        } @else {
+          <span class="badge badge-ok">Ativa</span>
+        }
+      </div>
+      <div class="grid2">
+        <div>
+          <p class="lbl">Cliente</p>
+          <p class="strong">{{ s.customerName }}</p>
+          <p class="mono">{{ s.customerId }}</p>
+        </div>
+        <div>
+          <p class="lbl">Filial</p>
+          <p class="strong">{{ s.branchName }}</p>
+          <p class="mono">{{ s.branchId }}</p>
+        </div>
+      </div>
+      <p class="lbl">Total</p>
+      <p class="total">{{ formatMoney(s.totalAmount) }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Itens</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th class="right">Qtd</th>
+            <th class="right">Preço unit.</th>
+            <th class="right">Desconto</th>
+            <th class="right">Total linha</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of s.items; track item.id) {
+            <tr>
+              <td>
+                <div class="strong">{{ item.productName }}</div>
+                <div class="mono">{{ item.productId }}</div>
+              </td>
+              <td class="right">{{ item.quantity }}</td>
+              <td class="right">{{ formatMoney(item.unitPrice) }}</td>
+              <td class="right">{{ formatMoney(item.discountAmount) }}</td>
+              <td class="right">{{ formatMoney(item.lineTotal) }}</td>
+              <td>
+                @if (item.isCancelled) {
+                  <span class="badge bad">Cancelado</span>
+                } @else {
+                  <span class="badge badge-ok">OK</span>
+                }
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn sm"
+                  [disabled]="item.isCancelled || s.isCancelled || busy()"
+                  (click)="cancelItemId.set(item.id)"
+                >
+                  Cancelar item
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else if (id) {
+    <div class="alert">Venda não encontrada</div>
+  } @else {
+    <div class="alert err">ID inválido</div>
+  }
+</div>
+
+@if (deleteOpen()) {
+  <div class="modal" (click)="deleteOpen.set(false)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <h3>Excluir venda?</h3>
+      <p class="muted">Esta ação não pode ser desfeita nesta interface.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn" [disabled]="busy()" (click)="deleteOpen.set(false)">Voltar</button>
+        <button type="button" class="btn danger" [disabled]="busy()" (click)="handleDelete()">Excluir</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (cancelSaleOpen()) {
+  <div class="modal" (click)="cancelSaleOpen.set(false)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <h3>Cancelar venda inteira?</h3>
+      <p class="muted">A venda será marcada como cancelada na API.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn" [disabled]="busy()" (click)="cancelSaleOpen.set(false)">Voltar</button>
+        <button type="button" class="btn danger" [disabled]="busy()" (click)="handleCancelSale()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (cancelItemId(); as cid) {
+  <div class="modal" (click)="cancelItemId.set(null)">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <h3>Cancelar este item?</h3>
+      <p class="muted">O item permanecerá na venda, marcado como cancelado.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn" [disabled]="busy()" (click)="cancelItemId.set(null)">Voltar</button>
+        <button
+          type="button"
+          class="btn danger"
+          [disabled]="busy()"
+          (click)="handleCancelItem(cid)"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+}
